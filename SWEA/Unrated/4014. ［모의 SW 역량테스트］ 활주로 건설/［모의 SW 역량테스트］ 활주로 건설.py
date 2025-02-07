@@ -3,7 +3,7 @@ for test_case in range(1, T+1):
     input_list = list(map(int, input().split()))
     N = input_list[0]
     X = input_list[1]
-    map_data = [0*N]*N
+    map_data = [[0]*N for _ in range(N)]
     fail_count = 0
 
     for i in range(N):
