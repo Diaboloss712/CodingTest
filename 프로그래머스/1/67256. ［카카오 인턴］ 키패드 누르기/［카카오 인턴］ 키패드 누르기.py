@@ -1,96 +1,38 @@
 def solution(numbers, hand):
-    cur = ['*', '#']
-
+    dict = {1:[0,0], 2:[0,1], 3:[0,2],
+           4:[1,0], 5:[1,1], 6:[1,2],
+           7:[2,0], 8:[2,1], 9:[2,2], 0:[3,1]}
+    
     answer = ''
-
+    l_pos = [3,0]
+    r_pos = [3,2]
     for num in numbers:
-        if num in [1, 4, 7]:
+        if num == 1 or num == 4 or num == 7:
+            l_pos = dict[num]
             answer += 'L'
-            cur[0] = num
             continue
-
-        if num in [3, 6, 9]:
+        if num == 3 or num == 6 or num == 9:
+            r_pos = dict[num]
             answer += 'R'
-            cur[1] = num
             continue
-
-        if num in [2, 5, 8, 0]:
-            left_hand = how_long(cur[0], num)
-            right_hand = how_long(cur[1], num)
-            if left_hand == right_hand:
-                if hand == 'left':
-                    answer += 'L'
-                    cur[0] = num
-                    continue
-                else:
-                    answer += 'R'
-                    cur[1] = num
-                    continue
-            elif left_hand < right_hand:
+        input_x = dict[num][1]
+        input_y = dict[num][0]
+        l_dis = abs(dict[num][0] - l_pos[0])\
+                + abs(dict[num][1] - l_pos[1])
+        r_dis = abs(dict[num][0] - r_pos[0])\
+                + abs(dict[num][1] - r_pos[1])
+        if l_dis > r_dis:
+            r_pos = dict[num]
+            answer += 'R'
+        elif l_dis == r_dis:
+            if hand == "left":
+                l_pos = dict[num]
                 answer += 'L'
-                cur[0] = num
-                continue
             else:
+                r_pos = dict[num]
                 answer += 'R'
-                cur[1] = num
-                continue
-
-    return answer
-
-
-def how_long(s, g):
-
-    phone = [[1, 2, 3], [4, 5, 6], [7, 8, 9], ['*', 0, '#']]
-
-    s_ij = []
-
-    # 좌표 찾기
-    for i in range(4):
-        if len(s_ij) == 2:
-            break
-        for j in range(3):
-            if len(s_ij) == 2:
-                break
-            if phone[i][j] == s:
-                s_ij.append(i)
-                s_ij.append(j)
-    ans = 0
-    while s != g:
-        if s in [1, 4, 7, '*']:
-            s = phone[s_ij[0]][s_ij[1] + 1]
-            s_ij = [s_ij[0], s_ij[1] + 1]
-            ans += 1
-            continue
-
-        elif s in [3, 6, 9, '#']:
-            s = phone[s_ij[0]][s_ij[1] - 1]
-            s_ij = [s_ij[0], s_ij[1] - 1]
-            ans += 1
-            continue
-
-        if g == 0:
-            while s != 0:
-                s = phone[s_ij[0]+1][s_ij[1]]
-                s_ij = [s_ij[0]+1, s_ij[1]]
-                ans += 1
-            return ans
-
-        if s == 0:
-            while s != g:
-                s = phone[s_ij[0] - 1][s_ij[1]]
-                s_ij = [s_ij[0] - 1, s_ij[1]]
-                ans += 1
-            return ans
-
-        if s > g:
-            s = phone[s_ij[0] - 1][s_ij[1]]
-            s_ij = [s_ij[0] - 1, s_ij[1]]
-            ans += 1
-            continue
         else:
-            s = phone[s_ij[0] + 1][s_ij[1]]
-            s_ij = [s_ij[0] + 1, s_ij[1]]
-            ans += 1
-            continue
-
-    return ans
+            l_pos = dict[num]
+            answer += 'L'
+                
+    return answer
