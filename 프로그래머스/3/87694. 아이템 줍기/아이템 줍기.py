@@ -3,7 +3,7 @@ dy = [0, -1, 0, 1]
 
 def solution(rectangle, characterX, characterY, itemX, itemY):
     global answer, visited, board
-    answer = float('inf')
+    answer = 10000
     board = [[0] * 102 for _ in range(102)]
     visited = [[0] * 102 for _ in range(102)]
 
@@ -20,19 +20,15 @@ def solution(rectangle, characterX, characterY, itemX, itemY):
     item_pos = (itemX * 2, itemY * 2)
     visited[char_pos[1]][char_pos[0]] = 1
     dfs(char_pos[0], char_pos[1], item_pos[0], item_pos[1], 0)
-
     return answer // 2
 
 def dfs(x, y, item_x, item_y, depth):
     global answer
-
     if depth >= answer:
         return
-
-    if (x, y) == (item_x, item_y):
+    if [x, y] == [item_x, item_y]:
         answer = min(answer, depth)
         return
-
     for direction in range(4):
         nx, ny = x + dx[direction], y + dy[direction]
 
