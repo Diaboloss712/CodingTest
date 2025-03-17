@@ -10,6 +10,6 @@ for test_case in range(1, T+1):
     dp[2] = min(dp[1] + min(plan[2] * day, month), three_month)
     for i in range(3, 12):
         dp[i] = min(dp[i - 1] + min(plan[i] * day, month), dp[i-3] + three_month)
-        if i == 11:
+        if i >= 11:
             dp[i] = min(min(dp[i - 1] + min(plan[i] * day, month), dp[i-3] + three_month), year)
     print(f'#{test_case} {dp[11]}')
