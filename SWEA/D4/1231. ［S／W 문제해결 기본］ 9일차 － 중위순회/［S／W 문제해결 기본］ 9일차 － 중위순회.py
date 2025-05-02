@@ -1,67 +1,50 @@
 class Node:
-    def __init__(self, key, height, value):
-        self.left = None
-        self.right = None
+    def __init__(self, key, value):
         self.key = key
         self.value = value
-        self.height = h
-
+        self.left = None
+        self.right = None
 
 class Tree:
     def __init__(self):
+        self.nodes = dict()
         self.root = None
 
-    def insert(self, key, height, value):
-        if self.root is None:
-            self.root = Node(key, height, value)
+    def insert(self, key, value, left=None, right=None):
+        if key not in self.nodes:
+            self.nodes[key] = Node(key, value)
         else:
-            self._insert(key, height, value)
+            self.nodes[key].value = value
 
-    def _insert(self, key, height, value):
-        node = self.search(key, height)
-        if node.key * 2 == key:
-            node.left = Node(key, height, value)
-        else:
-            node.right = Node(key, height, value)
+        if left:
+            if left not in self.nodes:
+                self.nodes[left] = Node(left, '')
+            self.nodes[key].left = self.nodes[left]
 
-    def search(self, key, height):
-        if self.root == key:
-            return self.root
-        else:
-            return self._search(self.root, key, height)
+        if right:
+            if right not in self.nodes:
+                self.nodes[right] = Node(right, '')
+            self.nodes[key].right = self.nodes[right]
 
-    def _search(self, node, key, height):
-        if h > node.height + 1:
-            temp_h = h
-            temp_key = key
-            while temp_h > node.height + 1:
-                temp_h -= 1
-                temp_key = temp_key // 2
-            if node.key * 2 == temp_key:
-                return self._search(node.left, key, h)
-            else:
-                return self._search(node.right, key, h)
-        else:
-            return node
-
-    def inorder(self):
-        self._inorder(self.root)
-        print()
-
-    def _inorder(self, node):
+    def inorder(self, node):
         if node:
-            self._inorder(node.left)
+            self.inorder(node.left)
             print(node.value, end='')
-            self._inorder(node.right)
+            self.inorder(node.right)
 
 for test_case in range(1, 11):
     N = int(input())
     tree = Tree()
-    h = 0
-    for i in range(1, N+1):
-        char = list(input().split())
-        if i >= 1 << h+1:
-            h += 1
-        tree.insert(i, h, char[1])
-    print(f'#{test_case}', end=' ')
-    tree.inorder()
+
+    for _ in range(N):
+        data = input().split()
+        key = int(data[0])
+        value = data[1]
+        left = int(data[2]) if len(data) >= 3 else None
+        right = int(data[3]) if len(data) == 4 else None
+        tree.insert(key, value, left, right)
+
+    tree.root = tree.nodes[1]
+    print(f'#{test_case} ', end='')
+    tree.inorder(tree.root)
+    print()
